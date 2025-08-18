@@ -60,14 +60,29 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 -   $\gamma$: Discount factor ($0 \le \gamma \le 1$).
 
 ### Value Functions & Bellman Equations
--   **State-Value Function ($V^\pi(s)$):** Expected return starting from state $s$ and following policy $\pi$.
-    \[ V^\pi(s) = \mathbb{E}_\pi [ G_t | S_t=s ] = \mathbb{E}_\pi [ \sum_{k=0}^\infty \gamma^k r_{t+k+1} | S_t=s ] \]
--   **Action-Value Function ($Q^\pi(s, a)$):** Expected return starting from state $s$, taking action $a$, and following policy $\pi$.
-    \[ Q^\pi(s, a) = \mathbb{E}_\pi [ G_t | S_t=s, A_t=a ] = \mathbb{E}_\pi [ \sum_{k=0}^\infty \gamma^k r_{t+k+1} | S_t=s, A_t=a ] \]
--   **Bellman Expectation Equation for $V^\pi$:**
-    \[ V^\pi(s) = \sum_{a} \pi(a|s) \sum_{s', r} P(s', r | s, a) [r + \gamma V^\pi(s')] \]
--   **Bellman Optimality Equation for $Q^*$ (used by Q-Learning):**
-    \[ Q^*(s, a) = \sum_{s', r} P(s', r | s, a) [r + \gamma \max_{a'} Q^*(s', a')] \]
+-   **State-Value Function ($`V^\pi(s)`$):** Expected return starting from state $s$ and following policy $\pi$.
+
+```math
+V^\pi(s) = \mathbb{E}_\pi \left[ G_t | S_t=s \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^\infty \gamma^k r_{t+k+1} | S_t=s \right]
+```
+
+-   **Action-Value Function ($`Q^\pi(s, a)`$):** Expected return starting from state $s$, taking action $a$, and following policy $\pi$.
+
+```math
+Q^\pi(s, a) = \mathbb{E}_\pi \left[ G_t | S_t=s, A_t=a \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^\infty \gamma^k r_{t+k+1} | S_t=s, A_t=a \right]
+```
+
+-   **Bellman Expectation Equation for $`V^\pi`$:**
+
+```math
+V^\pi(s) = \sum_{a} \pi(a|s) \sum_{s', r} P(s', r | s, a) \left[r + \gamma V^\pi(s')\right] 
+```
+
+-   **Bellman Optimality Equation for $`Q^*`$ (used by Q-Learning):**
+
+```math
+Q^*(s, a) = \sum_{s', r} P(s', r | s, a) \left[r + \gamma \max_{a'} Q^*(s', a')\right]
+```
 
 ### Exploration vs. Exploitation
 -   **Exploration:** Trying new actions to discover better rewards.
@@ -82,7 +97,9 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 ([1_simple_rl.ipynb](1_simple_rl.ipynb))
 -   **Core Idea:** Demonstrates the basic agent-environment loop. Agent remembers immediate rewards for state-action pairs and uses a simple epsilon-greedy policy based on average *immediate* rewards. **Does not perform true RL value learning.**
 -   **Mathematical Formulation:** No Bellman updates. Policy based on:
-    \[ \text{AvgR}(s, a) = \frac{\sum \text{rewards observed after } (s, a)}{\text{count of } (s, a)} \]
+```math
+\text{AvgR}(s, a) = \frac{\sum \text{rewards observed after } (s, a)}{\text{count of } (s, a)}
+```
 -   **Pseudocode:**
     1. Initialize memory `mem[s][a] -> [rewards]`
     2. For each episode:
@@ -113,10 +130,15 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 ([2_q_learning.ipynb](2_q_learning.ipynb))
 -   **Core Idea:** Learns the optimal action-value function ($Q^*$) **off-policy** using Temporal Difference (TD) updates.
 -   **Mathematical Formulation:** Bellman Optimality update:
-    \[ Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t)] \]
-    -   $\alpha$: Learning rate
-    -   $\gamma$: Discount factor
-    -   $\max_{a'} Q(s_{t+1}, a')$: Max Q-value in next state (greedy estimate of future value)
+
+```math
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t)]
+```
+
+- $\alpha$: Learning rate
+- $\gamma$: Discount factor
+- $\max_{a'} Q(s_{t+1}, a')$: Max Q-value in next state (greedy estimate of future value)
+
 -   **Pseudocode:**
     1. Initialize Q-table `Q(s, a)` to zeros.
     2. For each episode:
@@ -145,8 +167,12 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 ([3_sarsa.ipynb](3_sarsa.ipynb))
 -   **Core Idea:** Learns the action-value function ($Q^\pi$) for the policy currently being followed (**on-policy**) using TD updates.
 -   **Mathematical Formulation:** Update uses the *next action* chosen by the policy:
-    \[ Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t)] \]
-    -   $a_{t+1}$ is the action chosen in state $s_{t+1}$ by the current policy (e.g., $\epsilon$-greedy).
+
+```math
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t)]
+```
+
+-   $a_{t+1}$ is the action chosen in state $s_{t+1}$ by the current policy (e.g., $\epsilon$-greedy).
 -   **Pseudocode:**
     1. Initialize Q-table `Q(s, a)`.
     2. For each episode:
@@ -158,6 +184,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
          - Update `Q(s, a)` using `r`, `s'`, `a'`.
          - `s = s'`, `a = a'`
 -   **Code Snippet:**
+
     ```python
     # SARSA update
     current_q = q_table[state][action]
@@ -166,6 +193,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     td_error = td_target - current_q
     q_table[state][action] += alpha * td_error
     ```
+
 -   **Key Hyperparameters:** `alpha`, `gamma`, `epsilon`, `epsilon_decay`.
 -   **Pros:** On-policy (learns value of the exploration policy), often more stable/conservative in risky environments than Q-learning.
 -   **Cons:** Tabular, can be slower to converge to optimal if exploration persists, sensitive to policy changes.
@@ -176,9 +204,21 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 ([4_expected_sarsa.ipynb](4_expected_sarsa.ipynb))
 -   **Core Idea:** Like SARSA, but updates using the *expected* value over next actions, weighted by policy probabilities, reducing variance. Still **on-policy**.
 -   **Mathematical Formulation:**
-    \[ Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \mathbb{E}_{\pi}[Q(s_{t+1}, A')] - Q(s_t, a_t)] \]
-    \[ \mathbb{E}_{\pi}[Q(s', A')] = \sum_{a'} \pi(a'|s') Q(s', a') \]
-    For $\epsilon$-greedy: $\mathbb{E}_{\pi}[Q(s', A')] = (1 - \epsilon) \max_{a''} Q(s', a'') + \epsilon \frac{\sum_{a'} Q(s', a')}{|\mathcal{A}|}$
+
+```math
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \mathbb{E}_{\pi}[Q(s_{t+1}, A')] - Q(s_t, a_t)]
+```
+
+```math
+\mathbb{E}_{\pi}[Q(s', A')] = \sum_{a'} \pi(a'|s') Q(s', a')
+```
+
+For $\epsilon$-greedy:
+
+```math
+\mathbb{E}_{\pi}\left[Q(s', A')\right] = (1 - \epsilon) \max_{a''} Q(s', a'') + \epsilon \frac{\sum_{a'} Q(s', a')}{|\mathcal{A}|} 
+```
+
 -   **Pseudocode:**
     1. Initialize Q-table `Q(s, a)`.
     2. For each episode:
@@ -190,6 +230,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
          - Update `Q(s, a)` using `r` and $E[Q(s', A')]$.
          - `s = s'`
 -   **Code Snippet:**
+
     ```python
     # Expected SARSA update (assuming epsilon-greedy)
     current_q = q_table[state][action]
@@ -204,6 +245,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     td_error = td_target - current_q
     q_table[state][action] += alpha * td_error
     ```
+
 -   **Key Hyperparameters:** `alpha`, `gamma`, `epsilon`, `epsilon_decay`.
 -   **Pros:** On-policy, lower variance than SARSA, often more stable, same computational cost as Q-learning per update.
 -   **Cons:** Tabular, slightly more complex update calculation than SARSA.
@@ -231,6 +273,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
            - Update `Q(s_p, a_p)` with $(s_p, a_p, r_p, s'_p)$.
          - `s = s'`
 -   **Code Snippet:**
+
     ```python
     # Direct RL Update (same as Q-Learning)
     # ... q_learning_update(q_table, state, action, reward, next_state, ...)
@@ -247,6 +290,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
         r_p, s_prime_p = model[(s_p, a_p)]
         q_learning_update(q_table, s_p, a_p, r_p, s_prime_p, ...)
     ```
+
 -   **Key Hyperparameters:** `alpha`, `gamma`, `epsilon`, `k` (number of planning steps).
 -   **Pros:** Improves sample efficiency compared to pure Q-learning by reusing experience via the model. Simple integration of learning and planning.
 -   **Cons:** Tabular. Effectiveness depends heavily on model accuracy. Assumes deterministic model in simple form.
@@ -261,7 +305,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 ([6_reinforce.ipynb](6_reinforce.ipynb))
 -   **Core Idea:** Directly learns a parameterized policy $\pi(a|s; \theta)$ by increasing the probability of actions that led to high *cumulative* episode returns ($G_t$). **On-policy**, **Monte Carlo**.
 -   **Mathematical Formulation:** Updates policy parameters $\theta$ via gradient ascent on $J(\theta) = \mathbb{E}[G_t]$.
-    \[ \nabla_\theta J(\theta) \approx \sum_{t=0}^{T-1} G_t \nabla_\theta \log \pi(a_t | s_t; \theta) \]
+    $$\nabla_\theta J(\theta) \approx \sum_{t=0}^{T-1} G_t \nabla_\theta \log \pi(a_t | s_t; \theta) $$
     Loss function (for minimization): $L(\theta) = -\sum_{t=0}^{T-1} G_t \log \pi(a_t | s_t; \theta)$
     -   $G_t = \sum_{k=t}^{T-1} \gamma^{k-t} r_{k+1}$: Discounted return from step $t$.
 -   **Pseudocode:**
@@ -272,6 +316,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
        - Compute loss $L$.
        - Update $\theta$ using gradient descent on $L$.
 -   **Code Snippet:**
+
     ```python
     # Calculate returns (backward loop)
     returns = []
@@ -292,6 +337,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     loss.backward()
     optimizer.step()
     ```
+
 -   **Key Hyperparameters:** `learning_rate`, `gamma`. Network architecture.
 -   **Pros:** Simple policy gradient concept, works with discrete/continuous actions, learns stochastic policies.
 -   **Cons:** High variance due to Monte Carlo returns, episodic updates (waits until episode end), on-policy sample inefficiency.
@@ -302,20 +348,25 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 ([12_trpo.ipynb](12_trpo.ipynb))
 -   **Core Idea:** Improves policy gradient updates by constraining the change in the policy (measured by KL divergence) at each step, ensuring more stable and monotonic improvement. **On-policy**.
 -   **Mathematical Formulation:** Solves a constrained optimization problem (approximately):
-    \[ \max_{\theta} \quad \mathbb{E}_t \left[ \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)} \hat{A}_t \right] \]
-    \[ \text{s.t.} \quad \mathbb{E}_t [D_{KL}(\pi_{\theta_{old}}(\cdot|s_t) || \pi_{\theta}(\cdot|s_t))] \le \delta \]
-    Solved using Conjugate Gradient (to find direction $\approx F^{-1}g$) and Line Search (to satisfy constraint). $F$ is the Fisher Information Matrix.
+
+```math
+\max_{\theta} \quad \mathbb{E}_t \left[ \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)} \hat{A}_t \right]
+\text{s.t.} \quad \mathbb{E}_t [D_{KL}(\pi_{\theta_{old}}(\cdot|s_t) || \pi_{\theta}(\cdot|s_t))] \le \delta
+```
+
+Solved using Conjugate Gradient (to find direction $\approx F^{-1}g$) and Line Search (to satisfy constraint). $F$ is the Fisher Information Matrix.
 -   **Pseudocode:**
     1. Initialize actor $\pi_\theta$, critic $V_\phi$.
     2. For each iteration:
        - Collect trajectories using $\pi_{\theta_{old}}$. Store states, actions, rewards, log probs.
-       - Compute advantages $\hat{A}_t$ (using GAE with $V_\phi$).
+       - Compute advantages $`\hat{A}_t`$ (using GAE with $`V_\phi`$).
        - Compute policy gradient $g$.
        - Use Conjugate Gradient + Fisher-Vector Products to find step direction $s \approx F^{-1}g$.
        - Perform line search to find step size $\beta \alpha$ satisfying KL constraint $\delta$ and improving surrogate objective.
        - Update actor: $\theta_{new} \leftarrow \theta_{old} + \beta \alpha s$.
        - Update critic $V_\phi$ using collected data.
 -   **Code Snippet:** (Focus on conceptual update call)
+
     ```python
     # Conceptual TRPO update call
     policy_gradient = calculate_policy_gradient(...)
@@ -326,6 +377,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
         apply_update(actor, final_update)
     update_critic(...)
     ```
+
 -   **Key Hyperparameters:** `delta` (KL constraint), `gamma`, `lambda` (GAE), CG iterations, CG damping, line search parameters.
 -   **Pros:** Provides theoretical monotonic improvement guarantee (under approximations), very stable updates.
 -   **Cons:** Complex implementation (FVP, CG, line search), computationally expensive per update, on-policy.
@@ -344,14 +396,15 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     -   Critic Loss (minimize): $L_{critic} = \mathbb{E}_t [ (R_t - V(s_t; \phi))^2 ]$
     -   $\hat{A}_t = R_t - V(s_t; \phi)$: Advantage estimate (often using n-step returns or GAE for $R_t$).
 -   **Pseudocode:**
-    1. Initialize shared actor $\pi_\theta$ and critic $V_\phi$.
+    1. Initialize shared actor $`\pi_\theta`$ and critic $`V_\phi`$.
     2. Loop for iterations:
-       - Collect batch of N steps of experience $(s_t, a_t, r_{t+1}, s_{t+1}, d_t)$ using $\pi_\theta$.
-       - Compute n-step returns $R_t$ and advantages $\hat{A}_t$ using $V_\phi$.
+       - Collect batch of N steps of experience $`(s_t, a_t, r_{t+1}, s_{t+1}, d_t)`$ using $`\pi_\theta`$.
+       - Compute n-step returns $R_t$ and advantages $`\hat{A}_t`$ using $`V_\phi`$.
        - Compute actor loss (policy gradient + entropy) and critic loss (MSE).
        - Compute gradients for actor and critic based on the batch.
        - Apply synchronous gradient update to $\theta$ and $\phi$.
 -   **Code Snippet:**
+
     ```python
     # Calculate Advantage and Returns (e.g., using GAE)
     advantages, returns_to_go = compute_gae_and_returns(...)
@@ -376,6 +429,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     (value_loss_coeff * value_loss).backward()
     critic_optimizer.step()
     ```
+
 -   **Key Hyperparameters:** `learning_rates` (actor/critic), `gamma`, `lambda` (GAE), `n_steps` (rollout length), `value_loss_coeff`, `entropy_coeff`.
 -   **Pros:** More stable than REINFORCE, simpler than A3C/TRPO/PPO, good baseline, utilizes GPUs well.
 -   **Cons:** On-policy (sample inefficient), updates can still have variance, performance sometimes lower than PPO.
@@ -396,6 +450,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
        - Apply gradients asynchronously to the global network using a shared optimizer.
        - If episode done, reset environment.
 -   **Code Snippet:** (Conceptual - see `a3c_training.py`)
+
     ```python
     # Inside worker loop
     local_model.load_state_dict(global_model.state_dict())
@@ -414,6 +469,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
              global_param.grad = local_param.grad.clone()
     global_optimizer.step() # Updates global model
     ```
+
 -   **Key Hyperparameters:** `num_workers`, `n_steps`, learning rates, `gamma`, coefficients $c_v, c_e$. Optimizer details (e.g., shared Adam).
 -   **Pros:** No replay buffer needed, decorrelates data via parallelism, efficient on multi-core CPUs.
 -   **Cons:** Complex implementation (multiprocessing, shared memory, async updates), potential for stale gradients, often less GPU-efficient than A2C.
@@ -428,7 +484,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     -   Actor Update (maximize objective via gradient ascent, often minimize negative): $L(\theta) = - \mathbb{E}_{s \sim \mathcal{D}} [ Q(s, \mu(s; \theta); \phi) ]$.
     -   $\mu, Q$: Main networks; $\mu', Q'$: Target networks.
 -   **Pseudocode:**
-    1. Initialize actor $\mu_\theta$, critic $Q_\phi$, target networks $\mu'_{\theta'}, Q'_{\phi'}$, replay buffer $\mathcal{D}$.
+    1. Initialize actor $\mu_\theta$, critic $Q_\phi$, target networks $`\mu'_{\theta'}, Q'_{\phi'}`$, replay buffer $`\mathcal{D}`$.
     2. For each step:
        - Select action $a = \mu(s; \theta) + \text{Noise}$.
        - Execute $a$, get $r, s'$. Store $(s, a, r, s')$ in $\mathcal{D}$.
@@ -437,6 +493,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
        - Update actor $\mu_\theta$ using gradient from critic's output $Q(s, \mu(s))$.
        - Soft-update target networks: $\theta' \leftarrow \tau \theta + (1-\tau)\theta'$, $\phi' \leftarrow \tau \phi + (1-\tau)\phi'$.
 -   **Code Snippet:**
+
     ```python
     # Critic Update
     with torch.no_grad():
@@ -461,6 +518,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     soft_update(target_critic, critic, tau)
     soft_update(target_actor, actor, tau)
     ```
+
 -   **Key Hyperparameters:** `buffer_size`, `batch_size`, `gamma`, `tau` (soft update rate), actor/critic learning rates, exploration noise parameters.
 -   **Pros:** Off-policy sample efficiency, handles continuous actions directly.
 -   **Cons:** Sensitive to hyperparameters, can suffer from Q-value overestimation, exploration can be tricky.
@@ -472,10 +530,10 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 -   **Core Idea:** An **off-policy** actor-critic algorithm for **continuous actions** based on the **maximum entropy** framework. Learns a stochastic policy that maximizes both expected return and policy entropy, leading to improved exploration and robustness.
 -   **Mathematical Formulation:** Objective includes entropy term: $J(\pi) = \mathbb{E}_{\tau \sim \pi} [\sum \gamma^t (R_t + \alpha H(\pi(\cdot|s_t)))]$. Uses twin Q-critics, target critics, and often auto-tunes entropy coefficient $\alpha$.
     -   Critic Update (minimize loss for $Q_1, Q_2$): $L(\phi_i) = \mathbb{E} [ (Q_i(s,a) - y)^2 ]$ where $y = r + \gamma (1-d) [\min_{j=1,2} Q'_j(s', a') - \alpha \log \pi(a'|s')]$, $a' \sim \pi(\cdot|s')$.
-    -   Actor Update (minimize loss): $L(\theta) = \mathbb{E}_{s, a \sim \pi} [ \alpha \log \pi(a|s) - \min_{j=1,2} Q_j(s, a) ]$.
+    -   Actor Update (minimize loss): $`L(\theta) = \mathbb{E}_{s, a \sim \pi} \left[ \alpha \log \pi(a|s) - \min_{j=1,2} Q_j(s, a) \right]`$.
     -   Alpha Update (minimize loss): $L(\log \alpha) = \mathbb{E}_{a \sim \pi} [ -\log \alpha (\log \pi(a|s) + \bar{H}) ]$ (where $\bar{H}$ is target entropy).
 -   **Pseudocode:**
-    1. Initialize actor $\pi_\theta$, twin critics $Q_{\phi_1}, Q_{\phi_2}$, target critics $Q'_{\phi'_1}, Q'_{\phi'_2}$, replay buffer $\mathcal{D}$, $\log \alpha$.
+    1. Initialize actor $`\pi_\theta`$, twin critics $`Q_{\phi_1}, Q_{\phi_2}`$, target critics $`Q'_{\phi'_1}, Q'_{\phi'_2}`$, replay buffer $`\mathcal{D}`$, $`\log \alpha`$.
     2. For each step:
        - Select action $a \sim \pi(\cdot|s; \theta)$ (sampling).
        - Execute $a$, get $r, s'$. Store $(s, a, r, s')$ in $\mathcal{D}$.
@@ -485,6 +543,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
        - Update $\alpha$ (if auto-tuning) based on policy entropy.
        - Soft-update target critics.
 -   **Code Snippet:**
+
     ```python
     # Critic Target Calculation
     with torch.no_grad():
@@ -509,6 +568,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     
     # Soft Updates ...
     ```
+
 -   **Key Hyperparameters:** `buffer_size`, `batch_size`, `gamma`, `tau`, learning rates (actor, critic, alpha), initial `alpha`, `target_entropy` (if auto-tuning).
 -   **Pros:** State-of-the-art sample efficiency and performance on continuous control, robust, good exploration.
 -   **Cons:** More complex than DDPG/PPO, requires careful implementation (especially squashing correction).
@@ -536,6 +596,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
            - Compute combined loss $L$.
            - Update $\theta$ and $\phi$ using gradient descent on $L$.
 -   **Code Snippet:**
+
     ```python
     # Inside PPO update loop (for one epoch/minibatch)
     policy_dist = actor(states)
@@ -557,6 +618,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     # Update networks (typically combined loss or separate updates)
     # ... optimizer steps ...
     ```
+
 -   **Key Hyperparameters:** `clip_epsilon`, `gamma`, `lambda` (GAE), learning rates, `num_epochs`, `mini_batch_size`, `value_loss_coeff`, `entropy_coeff`.
 -   **Pros:** Simpler than TRPO, stable updates, good performance (often SOTA or near-SOTA), relatively sample efficient for an on-policy method.
 -   **Cons:** Still on-policy (less efficient than off-policy), performance sensitive to implementation details and hyperparameters.
@@ -571,9 +633,14 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 ([13_dqn.ipynb](13_dqn.ipynb))
 -   **Core Idea:** Combines Q-learning with a deep neural network to approximate $Q(s, a; \theta)$. Uses **Experience Replay** and **Target Networks** for stability. **Off-policy**.
 -   **Mathematical Formulation:** Minimizes TD error using target network $Q'$:
-    \[ L(\theta) = \mathbb{E}_{(s, a, r, s', d) \sim \mathcal{D}} [ (y - Q(s, a; \theta))^2 ] \]
-    \[ y = r + \gamma (1-d) \max_{a'} Q'(s', a'; \theta^{-}) \]
-    -   $\mathcal{D}$: Replay buffer. $\theta^{-}$: Target network parameters.
+
+```math
+L(\theta) = \mathbb{E}_{(s, a, r, s', d) \sim \mathcal{D}} [ (y - Q(s, a; \theta))^2 ] 
+
+y = r + \gamma (1-d) \max_{a'} Q'(s', a'; \theta^{-})
+```
+
+-   $`\mathcal{D}`$: Replay buffer. $`\theta^{-}`$: Target network parameters.
 -   **Pseudocode:**
     1. Initialize Q-network $Q_\theta$, target network $Q'_{\theta^-}$, replay buffer $\mathcal{D}$.
     2. For each episode:
@@ -586,6 +653,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
          - Periodically update target network: $\theta^- \leftarrow \theta$.
          - `s = s'`
 -   **Code Snippet:**
+
     ```python
     # DQN Optimization Step
     non_final_mask = torch.tensor(...) # Mask for non-terminal next states
@@ -606,6 +674,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     loss.backward()
     optimizer.step()
     ```
+
 -   **Key Hyperparameters:** `buffer_size`, `batch_size`, `gamma`, `tau` or `target_update_freq`, `learning_rate`, `epsilon` schedule.
 -   **Pros:** Handles high-dimensional states (e.g., pixels), off-policy sample efficiency, stable due to replay/target nets.
 -   **Cons:** Primarily for discrete actions, can overestimate Q-values, sensitive to hyperparameters.
@@ -632,6 +701,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
        - For each agent $i$: Update critic $Q_i$ and actor $\mu_i$.
        - Soft-update all target networks.
 -   **Code Snippet:** (Conceptual - Update involves joint info)
+
     ```python
     # Critic Update (Agent i)
     with torch.no_grad():
@@ -650,6 +720,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     actor_loss_i = -q_actor_loss.mean()
     # ... optimize actor i ...
     ```
+
 -   **Key Hyperparameters:** Similar to DDPG, but potentially per-agent. Buffer size, batch size, $\gamma, \tau$, learning rates, noise.
 -   **Pros:** Addresses non-stationarity in MARL, decentralized execution, handles mixed cooperative/competitive settings.
 -   **Cons:** Centralized critic scales poorly with many agents, credit assignment can be hard in cooperative settings.
@@ -663,17 +734,18 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     -   Constraint: $\frac{\partial Q_{tot}}{\partial Q_i} \ge 0$ (enforced by non-negative mixer weights, often via hypernetworks).
     -   Loss: Minimize TD error on $Q_{tot}$: $L = \mathbb{E} [ (y - Q_{tot}(x, \mathbf{a}))^2 ]$ where $y = r + \gamma Q'_{tot}(x', \mathbf{a}')$ with $a'_i = \arg\max_a Q'_i(o'_i, a)$.
 -   **Pseudocode:**
-    1. Initialize agent networks $Q_i$, target networks $Q'_i$, mixer $f_{mix}$, target mixer $f'_{mix}$, replay buffer $\mathcal{D}$.
+    1. Initialize agent networks $`Q_i`$, target networks $`Q'_i`$, mixer $`f_{mix}`$, target mixer $`f'_{mix}`$, replay buffer $`\mathcal{D}`$.
     2. For each step:
        - Each agent $i$ chooses $a_i$ using $\epsilon$-greedy on $Q_i(o_i)$.
        - Execute $\mathbf{a}$, get $r$, $o'$, $x'$. Store $(o, \mathbf{a}, r, o', x, x', done)$ in $\mathcal{D}$.
        - Sample mini-batch.
-       - Calculate target $y$ using target networks $Q'_i$ and target mixer $f'_{mix}$.
-       - Calculate current $Q_{tot}$ using main networks $Q_i$ and main mixer $f_{mix}$.
+       - Calculate target $`y`$ using target networks $`Q'_i`$ and target mixer $`f'_{mix}`$.
+       - Calculate current $`Q_{tot}`$ using main networks $`Q_i`$ and main mixer $`f_{mix}`$.
        - Compute loss $L$.
        - Update all $Q_i$ and $f_{mix}$ parameters via gradient descent on $L$.
        - Soft-update target networks.
 -   **Code Snippet:**
+
     ```python
     # Calculate Target Q_tot'
     with torch.no_grad():
@@ -694,6 +766,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     optimizer.step()
     # ... Soft update targets ...
     ```
+
 -   **Key Hyperparameters:** Like DQN, plus mixing network architecture, hypernetwork details.
 -   **Pros:** Good for cooperative tasks, enforces IQL principle (local optimum -> global optimum), scales better in action space than joint Q-learning.
 -   **Cons:** Limited representational power due to monotonicity, requires global state for mixer.
@@ -733,6 +806,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
          - Update $Q_0, Q_1$ from buffers. Update targets.
          - If `env_done`: break outer loop.
 -   **Code Snippet:** (Focus on hindsight and intrinsic reward)
+
     ```python
     # Inside low-level execution loop
     # ... execute action a, get next_state_norm, env_done ...
@@ -747,6 +821,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     # Hindsight is handled in buffer.sample() by replacing goal with achieved_goal
     # and setting reward/done accordingly for the hindsight sample.
     ```
+
 -   **Key Hyperparameters:** Number of levels, time limit `H`, learning rates, `gamma`, `tau`, `epsilon` schedule, buffer sizes, hindsight probability `p`.
 -   **Pros:** Can solve long-horizon/sparse reward tasks, structured exploration, potential for skill reuse.
 -   **Cons:** Very complex implementation, sensitive to goal definition, time limits, and hyperparameters, potential for suboptimal subgoal setting. **The notebook implementation has known issues.**
@@ -774,6 +849,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
        - **Backpropagation:** Update `N` and `W` for nodes/edges from `node` back up to root using `R`.
     3. Choose best action from root based on visit counts (or values).
 -   **Code Snippet:** (UCT Selection)
+
     ```python
     # Inside select_best_child_uct
     best_score = -float('inf')
@@ -788,6 +864,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
         # ... update best_child ...
     return best_child
     ```
+
 -   **Key Hyperparameters:** `num_simulations` (budget per step), `exploration_constant C`, `rollout_depth`, `gamma` (for rollouts).
 -   **Pros:** Anytime algorithm, handles large state/action spaces, no explicit value function needed for search, asymmetric tree growth.
 -   **Cons:** Requires a simulator/model, computationally intensive per step, rollout policy quality affects performance.
@@ -800,13 +877,14 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 -   **Mathematical Formulation (Conceptual):**
     -   Learns models: $p(s_{t+1}|s_t, a_t)$ (transition), $p(r_t|s_t)$ (reward), possibly $p(o_t|s_t)$ (observation/reconstruction), $q(s_t|...)$ (encoder).
     -   Model Loss: Maximize data likelihood (often via ELBO, including reconstruction, reward prediction, KL regularization terms). Simplified: MSE on next state & reward.
-    -   Planning (CEM): Optimize $\mathbb{E} [ \sum_{k=t}^{t+H-1} \gamma^{k-t} \hat{r}_k ]$ over action sequences $a_t..a_{t+H-1}$ using the learned latent model $(\hat{p}, \hat{r})$.
+    -   Planning (CEM): Optimize $`\mathbb{E} \left[ \sum_{k=t}^{t+H-1} \gamma^{k-t} \hat{r}_k \right]`$ over action sequences $`a_t..a_{t+H-1}`$ using the learned latent model $`(\hat{p}, \hat{r})`$.
 -   **Pseudocode:**
     1. Initialize latent dynamics model, replay buffer $\mathcal{D}$ (stores sequences).
     2. Loop:
        - **Interact:** Observe $s_t$. Plan action $a_t$ using CEM in latent space with current model. Execute $a_t$, get $r_t, s_{t+1}$. Store $(s_t, a_t, r_t, s_{t+1})$ in $\mathcal{D}$.
        - **Train Model:** Sample sequences from $\mathcal{D}$. Update model parameters to minimize prediction/reconstruction losses.
 -   **Code Snippet:** (CEM Planning Call)
+
     ```python
     # Inside main loop
     # state = current latent state representation
@@ -820,6 +898,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
     # Execute action in real env...
     # Train model...
     ```
+
 -   **Key Hyperparameters:** Model architecture (latent size, hidden dims), model learning rate, buffer size, sequence length, planning horizon `H`, CEM parameters (`J`, `M`, iterations).
 -   **Pros:** Very sample efficient (especially from images), learns compact world representation, effective planning.
 -   **Cons:** Complex model training, planning can be computationally expensive, model inaccuracies can lead to poor plans (compounding errors).
