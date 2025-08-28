@@ -11,7 +11,7 @@
 ![Last Commit](https://img.shields.io/github/last-commit/fareedkhan-dev/all-rl-algorithms)
 ![Size](https://img.shields.io/github/repo-size/fareedkhan-dev/all-rl-algorithms)
 [![contributions welcome](https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=flat-square)](https://github.com/fareedkhan-dev/all-rl-algorithms)
-![License](https://img.shields.io/github/license/fareedkhan-dev/all-rl-algorithms)
+<!-- ![License](https://img.shields.io/github/license/fareedkhan-dev/all-rl-algorithms) -->
 ![Stars](https://img.shields.io/github/stars/fareedkhan-dev/all-rl-algorithms?style=social)
 
 </div>
@@ -51,15 +51,15 @@ The repository currently includes implementations of the following RL algorithms
 
 | #  | Algorithm | Type | Description | Notebook |
 |----|-----------|------|-------------|----------|
-| 01 | **Simple Exploration Bot** | Basic | Demonstrates the core loop: interacting with the environment and storing experienced rewards for later action selection. *Does not actually learn in a true RL sense*. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](1_simple_rl.ipynb) |
-| 02 | **Q-Learning** | Value-Based | Learns an optimal action-value function (Q-function) through the Bellman equation, enabling goal-directed behavior. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](2_q_learning.ipynb) |
-| 03 | **SARSA** | Value-Based | On-policy learning algorithm that updates Q-values based on the actions actually taken, often resulting in more cautious behavior. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](3_sarsa.ipynb) |
-| 04 | **Expected SARSA** | Value-Based | On-policy with reduced variance, updates Q-values using the expected value of next actions, balancing exploration and exploitation. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](4_expected_sarsa.ipynb) |
-| 05 | **Dyna-Q** | Model-Based | Combines direct RL (Q-learning) with planning via a learned environment model, improving sample efficiency. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](5_dyna_q.ipynb) |
-| 06 | **REINFORCE** | Policy-Based | A Monte Carlo policy gradient method that directly optimizes a parameterized policy based on complete episode returns. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](6_reinforce.ipynb) |
-| 07 | **Proximal Policy Optimization (PPO)** | Actor-Critic | State-of-the-art, stabilizes policy updates via clipped surrogate objective. Balances exploration and exploitation efficiently. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](7_ppo.ipynb) |
-| 08 | **Advantage Actor-Critic (A2C)** | Actor-Critic | Uses a critic to estimate advantages, reducing variance compared to REINFORCE. Synchronous updates. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](8_a2c.ipynb) |
-| 09 | **Asynchronous Advantage Actor-Critic (A3C)** | Actor-Critic | An asynchronous version of A2C, using multiple workers to collect data and update the global network. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](9_a3c.ipynb) |
+| 01 | **Simple Exploration Bot** | Basic | Demonstrates the core loop: interacting with the environment and storing experienced rewards for later action selection. *Does not actually learn in a true RL sense*. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](01_simple_rl.ipynb) |
+| 02 | **Q-Learning** | Value-Based | Learns an optimal action-value function (Q-function) through the Bellman equation, enabling goal-directed behavior. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](02_q_learning.ipynb) |
+| 03 | **SARSA** | Value-Based | On-policy learning algorithm that updates Q-values based on the actions actually taken, often resulting in more cautious behavior. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](03_sarsa.ipynb) |
+| 04 | **Expected SARSA** | Value-Based | On-policy with reduced variance, updates Q-values using the expected value of next actions, balancing exploration and exploitation. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](04_expected_sarsa.ipynb) |
+| 05 | **Dyna-Q** | Model-Based | Combines direct RL (Q-learning) with planning via a learned environment model, improving sample efficiency. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](05_dyna_q.ipynb) |
+| 06 | **REINFORCE** | Policy-Based | A Monte Carlo policy gradient method that directly optimizes a parameterized policy based on complete episode returns. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](06_reinforce.ipynb) |
+| 07 | **Proximal Policy Optimization (PPO)** | Actor-Critic | State-of-the-art, stabilizes policy updates via clipped surrogate objective. Balances exploration and exploitation efficiently. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](07_ppo.ipynb) |
+| 08 | **Advantage Actor-Critic (A2C)** | Actor-Critic | Uses a critic to estimate advantages, reducing variance compared to REINFORCE. Synchronous updates. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](08_a2c.ipynb) |
+| 09 | **Asynchronous Advantage Actor-Critic (A3C)** | Actor-Critic | An asynchronous version of A2C, using multiple workers to collect data and update the global network. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](09_a3c.ipynb) |
 | 10 | **Deep Deterministic Policy Gradient (DDPG)** | Actor-Critic | Uses a separate action function to estimate Q-values, allowing operation in continuous action spaces. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](10_ddpg.ipynb) |
 | 11 | **Soft Actor-Critic (SAC)** | Actor-Critic | Off-policy actor-critic for continuous action spaces, based on maximum entropy RL. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](11_sac.ipynb) |
 | 12 | **Trust Region Policy Optimization (TRPO)** | On-Policy | Imposes a limit on how much the policy distribution can change in a single step. | [![Open Notebook](https://img.shields.io/badge/Open-Notebook-blue)](12_trpo.ipynb) |
