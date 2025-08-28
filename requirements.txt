@@ -1,4 +1,4 @@
-numpy
-matplotlib
-torch
-gymnasium
+numpy       # numerical operations
+matplotlib  # plotting
+torch       # deep learning
+gymnasium   # reinforcement learning
