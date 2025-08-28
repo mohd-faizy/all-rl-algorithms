@@ -8,42 +8,43 @@ To avoid the need to constantly refer to the original notebooks, here is a cheat
 <!-- omit in toc -->
 ## Table of Contents
 
-- [Core Concepts](#core-concepts)
-  - [Agent-Environment Loop](#agent-environment-loop)
-  - [Markov Decision Process (MDP)](#markov-decision-process-mdp)
-  - [Value Functions \& Bellman Equations](#value-functions--bellman-equations)
-  - [Exploration vs. Exploitation](#exploration-vs-exploitation)
-- [Basic / Tabular Methods](#basic--tabular-methods)
-  - [Simple Exploration Bot](#simple-exploration-bot)
-  - [Q-Learning](#q-learning)
-  - [SARSA](#sarsa)
-  - [Expected SARSA](#expected-sarsa)
-  - [Dyna-Q](#dyna-q)
-- [Policy Gradient Methods](#policy-gradient-methods)
-  - [REINFORCE (Monte Carlo Policy Gradient)](#reinforce-monte-carlo-policy-gradient)
-  - [Trust Region Policy Optimization (TRPO)](#trust-region-policy-optimization-trpo)
-- [Actor-Critic Methods](#actor-critic-methods)
-  - [Advantage Actor-Critic (A2C)](#advantage-actor-critic-a2c)
-  - [Asynchronous Advantage Actor-Critic (A3C)](#asynchronous-advantage-actor-critic-a3c)
-  - [Deep Deterministic Policy Gradient (DDPG)](#deep-deterministic-policy-gradient-ddpg)
-  - [Soft Actor-Critic (SAC)](#soft-actor-critic-sac)
-  - [Proximal Policy Optimization (PPO)](#proximal-policy-optimization-ppo)
-- [Value-Based Deep Methods](#value-based-deep-methods)
-  - [Deep Q-Networks (DQN)](#deep-q-networks-dqn)
-- [Multi-Agent RL (MARL)](#multi-agent-rl-marl)
-  - [Multi-Agent Deep Deterministic Policy Gradient (MADDPG)](#multi-agent-deep-deterministic-policy-gradient-maddpg)
-  - [QMIX (Monotonic Value Function Factorization)](#qmix-monotonic-value-function-factorization)
-- [Hierarchical RL (HRL)](#hierarchical-rl-hrl)
-  - [Hierarchical Actor-Critic (HAC)](#hierarchical-actor-critic-hac)
-- [Planning \& Model-Based Methods](#planning--model-based-methods)
-  - [Monte Carlo Tree Search (MCTS)](#monte-carlo-tree-search-mcts)
-  - [PlaNet (Deep Planning Network)](#planet-deep-planning-network)
+- [1. Core Concepts](#1-core-concepts)
+  - [1.1 Agent-Environment Loop](#11-agent-environment-loop)
+  - [1.2 Markov Decision Process (MDP)](#12-markov-decision-process-mdp)
+  - [1.3 Value Functions \& Bellman Equations](#13-value-functions--bellman-equations)
+  - [1.4 Exploration vs. Exploitation](#14-exploration-vs-exploitation)
+- [2. Basic / Tabular Methods](#2-basic--tabular-methods)
+  - [2.1 Simple Exploration Bot](#21-simple-exploration-bot)
+  - [2.2 Q-Learning](#22-q-learning)
+  - [2.3 SARSA](#23-sarsa)
+  - [2.4 Expected SARSA](#24-expected-sarsa)
+  - [2.5 Dyna-Q](#25-dyna-q)
+- [3. Policy Gradient Methods](#3-policy-gradient-methods)
+  - [3.1 REINFORCE (Monte Carlo Policy Gradient)](#31-reinforce-monte-carlo-policy-gradient)
+  - [3.2 Trust Region Policy Optimization (TRPO)](#32-trust-region-policy-optimization-trpo)
+- [4. Actor-Critic Methods](#4-actor-critic-methods)
+  - [4.1 Advantage Actor-Critic (A2C)](#41-advantage-actor-critic-a2c)
+  - [4.2 Asynchronous Advantage Actor-Critic (A3C)](#42-asynchronous-advantage-actor-critic-a3c)
+  - [4.3 Deep Deterministic Policy Gradient (DDPG)](#43-deep-deterministic-policy-gradient-ddpg)
+  - [4.4 Soft Actor-Critic (SAC)](#44-soft-actor-critic-sac)
+  - [4.5 Proximal Policy Optimization (PPO)](#45-proximal-policy-optimization-ppo)
+- [5. Value-Based Deep Methods](#5-value-based-deep-methods)
+  - [5.1 Deep Q-Networks (DQN)](#51-deep-q-networks-dqn)
+- [6. Multi-Agent RL (MARL)](#6-multi-agent-rl-marl)
+  - [6.1 Multi-Agent Deep Deterministic Policy Gradient (MADDPG)](#61-multi-agent-deep-deterministic-policy-gradient-maddpg)
+  - [6.2 QMIX (Monotonic Value Function Factorization)](#62-qmix-monotonic-value-function-factorization)
+- [7. Hierarchical RL (HRL)](#7-hierarchical-rl-hrl)
+  - [7.1 Hierarchical Actor-Critic (HAC)](#71-hierarchical-actor-critic-hac)
+- [8. Planning \& Model-Based Methods](#8-planning--model-based-methods)
+  - [8.1 Monte Carlo Tree Search (MCTS)](#81-monte-carlo-tree-search-mcts)
+  - [8.2 PlaNet (Deep Planning Network)](#82-planet-deep-planning-network)
+- [Key Insights \& Takeaways](#key-insights--takeaways)
 
 ---
 
-## Core Concepts
+## 1. Core Concepts
 
-### Agent-Environment Loop
+### 1.1 Agent-Environment Loop
 The fundamental interaction cycle in RL:
 1.  Agent observes state $s_t$.
 2.  Agent selects action $a_t$ based on policy $\pi(a_t|s_t)$.
@@ -51,7 +52,7 @@ The fundamental interaction cycle in RL:
 4.  Environment provides reward $r_t$.
 5.  Agent updates policy/values based on $(s_t, a_t, r_t, s_{t+1})$.
 
-### Markov Decision Process (MDP)
+### 1.2 Markov Decision Process (MDP)
 Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 -   $S$: Set of states.
 -   $A$: Set of actions.
@@ -59,7 +60,7 @@ Formal framework for RL problems, defined by $(S, A, P, R, \gamma)$:
 -   $R(s, a, s')$: Reward function.
 -   $\gamma$: Discount factor ($0 \le \gamma \le 1$).
 
-### Value Functions & Bellman Equations
+### 1.3 Value Functions & Bellman Equations
 -   **State-Value Function ($`V^\pi(s)`$):** Expected return starting from state $s$ and following policy $\pi$.
 
 ```math
@@ -84,16 +85,16 @@ V^\pi(s) = \sum_{a} \pi(a|s) \sum_{s', r} P(s', r | s, a) \left[r + \gamma V^\pi
 Q^*(s, a) = \sum_{s', r} P(s', r | s, a) \left[r + \gamma \max_{a'} Q^*(s', a')\right]
 ```
 
-### Exploration vs. Exploitation
+### 1.4 Exploration vs. Exploitation
 -   **Exploration:** Trying new actions to discover better rewards.
 -   **Exploitation:** Choosing the action currently known to yield the best expected reward.
 -   **$\epsilon$-Greedy:** Common strategy: With probability $\epsilon$, explore (random action); with probability $1-\epsilon$, exploit (greedy action). $\epsilon$ often decays over time.
 
 ---
 
-## Basic / Tabular Methods
+## 2. Basic / Tabular Methods
 
-### Simple Exploration Bot
+### 2.1 Simple Exploration Bot
 ([1_simple_rl.ipynb](1_simple_rl.ipynb))
 -   **Core Idea:** Demonstrates the basic agent-environment loop. Agent remembers immediate rewards for state-action pairs and uses a simple epsilon-greedy policy based on average *immediate* rewards. **Does not perform true RL value learning.**
 -   **Mathematical Formulation:** No Bellman updates. Policy based on:
@@ -126,7 +127,7 @@ Q^*(s, a) = \sum_{s', r} P(s', r | s, a) \left[r + \gamma \max_{a'} Q^*(s', a')\
 -   **Cons:** Does not learn long-term values, only immediate rewards. Not true RL. Inefficient memory.
 -   **Use Cases:** Educational demonstration of basic agent structure.
 
-### Q-Learning
+### 2.2 Q-Learning
 ([2_q_learning.ipynb](2_q_learning.ipynb))
 -   **Core Idea:** Learns the optimal action-value function ($Q^*$) **off-policy** using Temporal Difference (TD) updates.
 -   **Mathematical Formulation:** Bellman Optimality update:
@@ -163,7 +164,7 @@ Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma \max_{a'} Q(s_{t+1}, a
 -   **Common Pitfalls:** Tuning $\alpha$ and $\epsilon$. Ensuring sufficient exploration.
 -   **Use Cases:** Small, discrete state/action spaces, foundational understanding.
 
-### SARSA
+### 2.3 SARSA
 ([3_sarsa.ipynb](3_sarsa.ipynb))
 -   **Core Idea:** Learns the action-value function ($Q^\pi$) for the policy currently being followed (**on-policy**) using TD updates.
 -   **Mathematical Formulation:** Update uses the *next action* chosen by the policy:
@@ -200,7 +201,7 @@ Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha [r_t + \gamma Q(s_{t+1}, a_{t+1}) - 
 -   **Common Pitfalls:** Ensuring the *next* action `a'` is chosen correctly before the update.
 -   **Use Cases:** When evaluating the current policy is important, safer exploration needed.
 
-### Expected SARSA
+### 2.4 Expected SARSA
 ([4_expected_sarsa.ipynb](4_expected_sarsa.ipynb))
 -   **Core Idea:** Like SARSA, but updates using the *expected* value over next actions, weighted by policy probabilities, reducing variance. Still **on-policy**.
 -   **Mathematical Formulation:**
@@ -251,7 +252,7 @@ For $\epsilon$-greedy:
 -   **Cons:** Tabular, slightly more complex update calculation than SARSA.
 -   **Use Cases:** Where SARSA is applicable but stability/variance is an issue.
 
-### Dyna-Q
+### 2.5 Dyna-Q
 ([5_dyna_q.ipynb](5_dyna_q.ipynb))
 -   **Core Idea:** Integrates **model-free learning (Q-learning)** with **model-based planning**. Learns a model of the environment from real experience and uses it to perform extra "planning" updates on the Q-table using simulated experience.
 -   **Mathematical Formulation:**
@@ -299,9 +300,9 @@ For $\epsilon$-greedy:
 
 ---
 
-## Policy Gradient Methods
+## 3. Policy Gradient Methods
 
-### REINFORCE (Monte Carlo Policy Gradient)
+### 3.1 REINFORCE (Monte Carlo Policy Gradient)
 ([6_reinforce.ipynb](6_reinforce.ipynb))
 -   **Core Idea:** Directly learns a parameterized policy $\pi(a|s; \theta)$ by increasing the probability of actions that led to high *cumulative* episode returns ($G_t$). **On-policy**, **Monte Carlo**.
 -   **Mathematical Formulation:** Updates policy parameters $\theta$ via gradient ascent on $J(\theta) = \mathbb{E}[G_t]$.
@@ -344,7 +345,7 @@ For $\epsilon$-greedy:
 -   **Common Pitfalls:** High variance leading to unstable training, requires careful learning rate tuning.
 -   **Use Cases:** Simple benchmarks, conceptual understanding, basis for actor-critic.
 
-### Trust Region Policy Optimization (TRPO)
+### 3.2 Trust Region Policy Optimization (TRPO)
 ([12_trpo.ipynb](12_trpo.ipynb))
 -   **Core Idea:** Improves policy gradient updates by constraining the change in the policy (measured by KL divergence) at each step, ensuring more stable and monotonic improvement. **On-policy**.
 -   **Mathematical Formulation:** Solves a constrained optimization problem (approximately):
@@ -386,9 +387,9 @@ Solved using Conjugate Gradient (to find direction $\approx F^{-1}g$) and Line S
 
 ---
 
-## Actor-Critic Methods
+## 4. Actor-Critic Methods
 
-### Advantage Actor-Critic (A2C)
+### 4.1 Advantage Actor-Critic (A2C)
 ([8_a2c.ipynb](8_a2c.ipynb))
 -   **Core Idea:** A **synchronous**, simpler version of A3C. Uses an actor (policy) and a critic (value function) trained on batches of experience collected by the actor. Reduces variance compared to REINFORCE by using advantage estimates. **On-policy**.
 -   **Mathematical Formulation:**
@@ -436,7 +437,7 @@ Solved using Conjugate Gradient (to find direction $\approx F^{-1}g$) and Line S
 -   **Common Pitfalls:** Balancing actor/critic learning rates, choosing `n_steps`.
 -   **Use Cases:** Discrete/continuous control benchmarks, simpler alternative to A3C/PPO.
 
-### Asynchronous Advantage Actor-Critic (A3C)
+### 4.2 Asynchronous Advantage Actor-Critic (A3C)
 ([9_a3c.ipynb](9_a3c.ipynb) & [a3c_training.py](a3c_training.py))
 -   **Core Idea:** Uses multiple parallel workers, each with a local copy of the actor-critic network and an environment instance. Workers compute gradients locally based on n-step returns and asynchronously update a shared global network. **On-policy**.
 -   **Mathematical Formulation:** Same loss function as A2C (per worker), but updates are applied asynchronously to global parameters $\theta_{global}, \phi_{global}$ using gradients computed from local parameters $\theta', \phi'$.
@@ -476,7 +477,7 @@ Solved using Conjugate Gradient (to find direction $\approx F^{-1}g$) and Line S
 -   **Common Pitfalls:** Race conditions with shared optimizer/gradients, worker synchronization.
 -   **Use Cases:** Historically significant for Atari/continuous control, CPU-based parallel training.
 
-### Deep Deterministic Policy Gradient (DDPG)
+### 4.3 Deep Deterministic Policy Gradient (DDPG)
 ([10_ddpg.ipynb](10_ddpg.ipynb))
 -   **Core Idea:** An **off-policy** actor-critic algorithm primarily for **continuous action spaces**. Learns a deterministic policy (actor) alongside a Q-function (critic). Uses ideas from DQN (replay buffer, target networks) for stability.
 -   **Mathematical Formulation:**
@@ -525,7 +526,7 @@ Solved using Conjugate Gradient (to find direction $\approx F^{-1}g$) and Line S
 -   **Common Pitfalls:** Learning rates, noise scale/decay, target update rate $\tau$.
 -   **Use Cases:** Continuous control (robotics, physics simulation).
 
-### Soft Actor-Critic (SAC)
+### 4.4 Soft Actor-Critic (SAC)
 ([11_sac.ipynb](11_sac.ipynb))
 -   **Core Idea:** An **off-policy** actor-critic algorithm for **continuous actions** based on the **maximum entropy** framework. Learns a stochastic policy that maximizes both expected return and policy entropy, leading to improved exploration and robustness.
 -   **Mathematical Formulation:** Objective includes entropy term: $J(\pi) = \mathbb{E}_{\tau \sim \pi} [\sum \gamma^t (R_t + \alpha H(\pi(\cdot|s_t)))]$. Uses twin Q-critics, target critics, and often auto-tunes entropy coefficient $\alpha$.
@@ -575,7 +576,7 @@ Solved using Conjugate Gradient (to find direction $\approx F^{-1}g$) and Line S
 -   **Common Pitfalls:** Correct log prob calculation (tanh squashing correction), alpha tuning stability, target entropy choice.
 -   **Use Cases:** Continuous control (robotics, benchmarks), situations needing robust exploration.
 
-### Proximal Policy Optimization (PPO)
+### 4.5 Proximal Policy Optimization (PPO)
 ([7_ppo.ipynb](7_ppo.ipynb))
 -   **Core Idea:** An **on-policy** actor-critic method that simplifies TRPO's constrained update using a **clipped surrogate objective**. Allows multiple epochs of updates on collected data for better sample efficiency.
 -   **Mathematical Formulation:**
@@ -627,9 +628,9 @@ Solved using Conjugate Gradient (to find direction $\approx F^{-1}g$) and Line S
 
 ---
 
-## Value-Based Deep Methods
+## 5. Value-Based Deep Methods
 
-### Deep Q-Networks (DQN)
+### 5.1 Deep Q-Networks (DQN)
 ([13_dqn.ipynb](13_dqn.ipynb))
 -   **Core Idea:** Combines Q-learning with a deep neural network to approximate $Q(s, a; \theta)$. Uses **Experience Replay** and **Target Networks** for stability. **Off-policy**.
 -   **Mathematical Formulation:** Minimizes TD error using target network $Q'$:
@@ -683,9 +684,9 @@ y = r + \gamma (1-d) \max_{a'} Q'(s', a'; \theta^{-})
 
 ---
 
-## Multi-Agent RL (MARL)
+## 6. Multi-Agent RL (MARL)
 
-### Multi-Agent Deep Deterministic Policy Gradient (MADDPG)
+### 6.1 Multi-Agent Deep Deterministic Policy Gradient (MADDPG)
 ([14_maddpg.ipynb](14_maddpg.ipynb))
 -   **Core Idea:** Extends DDPG to multi-agent settings using the "centralized training, decentralized execution" paradigm. Each agent has an actor and a *centralized* critic that observes joint states/observations and actions. **Off-policy**.
 -   **Mathematical Formulation:**
@@ -726,7 +727,7 @@ y = r + \gamma (1-d) \max_{a'} Q'(s', a'; \theta^{-})
 -   **Cons:** Centralized critic scales poorly with many agents, credit assignment can be hard in cooperative settings.
 -   **Use Cases:** Multi-robot coordination, predator-prey, cooperative navigation.
 
-### QMIX (Monotonic Value Function Factorization)
+### 6.2 QMIX (Monotonic Value Function Factorization)
 ([15_qmix.ipynb](15_qmix.ipynb))
 -   **Core Idea:** A value-based MARL algorithm for **cooperative** tasks. Learns individual agent Q-functions $Q_i$ and mixes them **monotonically** using a mixing network conditioned on the global state to produce $Q_{tot}$. **Off-policy**, **centralized training, decentralized execution**.
 -   **Mathematical Formulation:**
@@ -774,9 +775,9 @@ y = r + \gamma (1-d) \max_{a'} Q'(s', a'; \theta^{-})
 
 ---
 
-## Hierarchical RL (HRL)
+## 7. Hierarchical RL (HRL)
 
-### Hierarchical Actor-Critic (HAC)
+### 7.1 Hierarchical Actor-Critic (HAC)
 ([16_hac.ipynb](16_hac.ipynb))
 -   **Core Idea:** Learns policies at multiple levels of abstraction. High levels set subgoals (as "actions") for lower levels, which execute primitive actions to achieve them within a time limit $H$. Uses **intrinsic rewards** and **hindsight** for learning subgoals. **Off-policy**.
 -   **Mathematical Formulation (Conceptual):**
@@ -830,9 +831,9 @@ y = r + \gamma (1-d) \max_{a'} Q'(s', a'; \theta^{-})
 
 ---
 
-## Planning & Model-Based Methods
+## 8. Planning & Model-Based Methods
 
-### Monte Carlo Tree Search (MCTS)
+### 8.1 Monte Carlo Tree Search (MCTS)
 ([17_mcts.ipynb](17_mcts.ipynb))
 -   **Core Idea:** An **online planning** algorithm that builds a search tree using simulated trajectories (rollouts) from the current state. Uses statistics (visit counts, values) and UCT to balance exploration/exploitation within the search tree. **Requires a simulator/model**.
 -   **Mathematical Formulation:**
@@ -871,7 +872,7 @@ y = r + \gamma (1-d) \max_{a'} Q'(s', a'; \theta^{-})
 -   **Common Pitfalls:** Tuning `C`, efficient implementation of steps, quality of rollouts.
 -   **Use Cases:** Game playing (Go, Chess), planning problems with simulators.
 
-### PlaNet (Deep Planning Network)
+### 8.2 PlaNet (Deep Planning Network)
 ([18_planet.ipynb](18_planet.ipynb))
 -   **Core Idea:** A **model-based** RL agent that learns a **latent dynamics model** (often an RSSM) directly from experience (potentially high-dimensional observations). It then performs **planning directly in the latent space** using algorithms like CEM to select actions. **Off-policy**.
 -   **Mathematical Formulation (Conceptual):**
@@ -907,10 +908,18 @@ y = r + \gamma (1-d) \max_{a'} Q'(s', a'; \theta^{-})
 
 ---
 
-> **Pro Tip:** Standardizing advantages (in policy gradient / actor-critic methods) or returns (in REINFORCE) often significantly stabilizes training. This involves subtracting the mean and dividing by the standard deviation of the advantages/returns within a batch or episode.
+## Key Insights & Takeaways
 
-> **Did You Know?** Many state-of-the-art algorithms combine ideas. For example, PPO and A2C are actor-critic methods using policy gradients. SAC combines actor-critic with maximum entropy RL. PlaNet combines model-based learning with CEM planning.
+> **Pro Tip**: Standardizing advantages (in policy gradient/actor-critic methods) or returns (in REINFORCE) often significantly stabilizes training. This involves subtracting the mean and dividing by the standard deviation within each batch or episode.
+
+> **Algorithm Combinations**: Many state-of-the-art algorithms combine multiple ideas. PPO and A2C use actor-critic with policy gradients. SAC combines actor-critic with maximum entropy RL. PlaNet integrates model-based learning with CEM planning.
+
+> **Implementation Details Matter**: Small implementation details can dramatically affect performance. Pay attention to network initialization, normalization techniques, and update frequencies.
+
+> **Environment Design**: The choice of state representation, action space, and reward function often matters more than the specific algorithm used.
+
+> **Sample Efficiency vs Stability Trade-off**: Off-policy methods (SAC, DDPG) are typically more sample efficient, while on-policy methods (PPO, A2C) are often more stable and easier to tune.
 
 ---
 
-This cheat sheet provides a high-level overview. For detailed implementation and nuances, refer to the specific notebooks in the repository and the original research papers. Good luck learning!
+👉 This cheat sheet provides a high-level overview. For detailed implementation and nuances, refer to the specific notebooks in the repository and the original research papers. Good luck learning!
