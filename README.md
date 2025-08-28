@@ -11,7 +11,7 @@
 ![Last Commit](https://img.shields.io/github/last-commit/fareedkhan-dev/all-rl-algorithms)
 ![Size](https://img.shields.io/github/repo-size/fareedkhan-dev/all-rl-algorithms)
 [![contributions welcome](https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=flat-square)](https://github.com/fareedkhan-dev/all-rl-algorithms)
-<!-- ![License](https://img.shields.io/github/license/fareedkhan-dev/all-rl-algorithms) -->
+![License](https://img.shields.io/github/license/fareedkhan-dev/all-rl-algorithms)
 ![Stars](https://img.shields.io/github/stars/fareedkhan-dev/all-rl-algorithms?style=social)
 
 </div>
@@ -85,31 +85,48 @@ Complementing the detailed notebooks, a comprehensive **[RL Cheat Sheet](cheatsh
 
 >➡️ **[View the RL Cheat Sheet here](cheatsheet.md)**
 
-## 🛠️ Installation and Setup
+## 🛠️ Installation and Setup  
 
-Follow these steps to get started:
+Follow these steps to get started:  
 
-1.  **Clone the repository:**
+1. **Clone the repository:**  
 
-    ```bash
-    git clone https://github.com/fareedkhan-dev/all-rl-algorithms.git
-    cd all-rl-algorithms
-    ```
+   ```bash
+   git clone https://github.com/fareedkhan-dev/all-rl-algorithms.git
+   cd all-rl-algorithms
+   ```
 
-2.  **Create a virtual environment (Recommended):**
-
-    ```bash
-    python -m venv .venv-all-rl-algos
-    source .venv-all-rl-algos/bin/activate  # Linux/macOS
-    .venv-all-rl-algos\Scripts\activate     # Windows
-    ```
-
-3.  **Install dependencies:**
+2.  **Create a virtual environment (using uv):**
+(⚡ faster alternative to python -m venv)
 
     ```bash
-    pip install -r requirements.txt
+    # Initialize a new project (⭐ only if starting fresh, not when cloning)
+    uv init  
+
+    # Create a virtual environment
+    uv venv  
     ```
-4.  **Multiprocessing in A3C:** Please run `a3c_training.py` in the terminal instead of the jupyter notebook to avoid any complication from multiprocessing.
+3. **Activate the virtual environment:**
+   
+    ```bash
+    # Windows
+    .venv\Scripts\activate  
+
+    # macOS / Linux
+    source .venv/bin/activate
+    ```
+
+4.  **Install dependencies:**
+
+    ```bash
+    uv add -r requirements.txt
+    ```
+5.  **Multiprocessing in A3C:** Please run `a3c_training.py` in the terminal instead of the jupyter notebook to avoid any complication from multiprocessing.
+
+> 💡 Note: If you don’t have uv installed yet, you can install it via:
+```bash
+pip install uv
+```
 
 ## 🧑‍🏫 How to Use This Repo: A Learning Guide
 
