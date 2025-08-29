@@ -1,0 +1,18 @@
+# Environment variables
+*.env
+
+# Python virtual environment
+venv/
+
+# Binary files
+*.bin
+
+# Compiled Python files
+*.pyc
+__pycache__/
+
+# VS Code settings (optional but useful)
+.vscode/
+
+# Jupyter Notebook checkpoints (optional)
+.ipynb_checkpoints/
